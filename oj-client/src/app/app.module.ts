@@ -9,11 +9,15 @@ import { ProblemListComponent } from './components/problem-list/problem-list.com
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 
 import {DataService} from './services/data.service';
+import {CollaborationService} from './services/collaboration.service';
+
+
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 import {HttpClientModule} from '@angular/common/http';
 import {HttpModule} from '@angular/http';
+import { EditorComponent } from './components/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,8 @@ import {HttpModule} from '@angular/http';
     ProblemListComponent,
     ProblemDetailComponent,
     NewProblemComponent,
-    NavbarComponent
+    NavbarComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +34,10 @@ import {HttpModule} from '@angular/http';
     FormsModule,
     HttpClientModule
   ],
-  providers: [DataService],
+  providers: [
+    DataService,
+    CollaborationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
