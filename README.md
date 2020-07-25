@@ -89,3 +89,11 @@ A single-page web application that enables multiple user to solve coding problem
      Then run:
      sudo apt-get update
      sudo apt-get install nginx
+
+## Launch
+
+After installation, just
+
+```
+sudo sh launcher.sh
+```
