@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {CollaborationService} from '../../services/collaboration.service';
 import {ActivatedRoute,Params} from '@angular/router';
+import {DataService} from '../../services/data.service';
+
 declare const ace:any;
 @Component({
   selector: 'app-editor',
@@ -9,21 +11,23 @@ declare const ace:any;
 })
 export class EditorComponent implements OnInit {
   editor:any;
-  languages:string[]=['Java','Python'];
-  language:string='Java';
+  languages:string[]=['java','python'];
+  language:string='java';
   sessionId:string;
   constructor(private collaboration:CollaborationService,
-              private route:ActivatedRoute) { }
+              private route:ActivatedRoute,
+              private dataservice:DataService) { }
   defaultContent = {
-    'Java': `public class Example {
+    'java': `public class Example {
       public static void main(String[] args) {
           // Type your Java code here
       }
     }`,
-    'Python': `class Solution:
+    'python': `class Solution:
     def example():
         # Write your Python code here`
    };
+   output : string='testing';
   ngOnInit() {
     this.route.params
       .subscribe(params=>{
@@ -73,7 +77,14 @@ export class EditorComponent implements OnInit {
   }
 
   submit():void{
-    const userCode=this.editor.getValue();
-    console.log(userCode);
+    const userCodes=this.editor.getValue();
+    const data={
+      userCodes:userCodes,
+      lang : this.language.toLocaleLowerCase()
+    };
+
+    //console.log(data['lang']);
+    this.dataservice.buildAndRun(data)
+      .then(res=>this.output=res.text);
   }
 }

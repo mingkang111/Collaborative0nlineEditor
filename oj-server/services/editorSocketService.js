@@ -82,17 +82,12 @@ module.exports=function(io){
             const sessionid=socketIdToSessionId[socket.id];
             let foundAndRemove=false;
 
-            
             if (sessionid in collaborations){
                 const participants=collaborations[sessionid]['participants'];
                 const index=participants.indexOf(socket.id);
                 if (index>=0){
-
-                    //delete the socketId from participants
                     participants.slice(index,1);
                     foundAndRemove=true;
-
-                    //Store the cached content and delete the session
                     if (participants.length===0){
                         const key=sessionPath+'/'+sessionid;
                         const value=JSON.stringify(collaborations[sessionid]['cachedInstructions']);

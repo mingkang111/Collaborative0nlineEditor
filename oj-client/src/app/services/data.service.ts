@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 
 
 import {Problem} from '../models/problem.model';
+import { error } from 'util';
 //import {PROBLEMS} from '../mock-problems';
 @Injectable()
 export class DataService {
@@ -43,6 +44,17 @@ export class DataService {
         return res;
       })
       .catch(this.handleError);
+  }
+
+  buildAndRun(data) : Promise<any> {
+    const options={headers:new HttpHeaders({'Content-Type':'application/json'})};
+    return this.httpClient.post('api/v1/build_and_run',data,options)
+    .toPromise()
+    .then((res)=>{
+      console.log(res);
+      return res;
+    })
+    .catch(this.handleError);
   }
 
   private handleError(error:any):Promise<any>{
