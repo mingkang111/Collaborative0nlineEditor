@@ -1,6 +1,6 @@
 <!-- @format -->
 
-# Collaborative-Online-Judge-System
+# CodeTogether
 
 A single-page web application that enables multiple user to solve coding problems collaboratively and simultaneously.
 
