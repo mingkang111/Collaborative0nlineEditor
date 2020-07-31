@@ -4,9 +4,6 @@
 
 A single-page web application that enables multiple user to solve coding problems collaboratively and simultaneously.
 
-## Demo
-
-[demo]()
 
 ## Major use cases
 
