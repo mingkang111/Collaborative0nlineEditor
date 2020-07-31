@@ -1,11 +1,10 @@
-const mongoose=require('mongoose');
-const ProblemSchema=mongoose.Schema({
-    id:Number,
-    name:String,
-    desc:String,
-    difficulty:String
+var mongoose = require("mongoose");
+var ProblemSchema = mongoose.Schema({
+  id: Number,
+  name: String,
+  desc: String,
+  difficulty: String
 });
+var problemModel = mongoose.model("ProblemModel", ProblemSchema);
 
-const ProblemModel=mongoose.model('problemmodels',ProblemSchema);
-//const ProblemModel=mongoose.model('problem',ProblemSchema);
-module.exports=ProblemModel;
+module.exports = problemModel;

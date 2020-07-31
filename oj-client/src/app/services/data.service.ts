@@ -1,63 +1,62 @@
 import { Injectable } from '@angular/core';
-import {HttpClient,HttpHeaders,HttpResponse} from '@angular/common/http';
-import {Observable} from'rxjs/Rx';
-import {BehaviorSubject} from'rxjs/BehaviorSubject';
+import { Problem } from "../models/problem.model";
+import { PROBLEMS } from "../mock-problems";
+import { Http, Response, Headers } from '@angular/http';
+import { BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 
-import {Problem} from '../models/problem.model';
-import { error } from 'util';
-//import {PROBLEMS} from '../mock-problems';
 @Injectable()
 export class DataService {
-  //problems:Problem[]=PROBLEMS;
-  private _problemService=new BehaviorSubject<Problem[]>([]);
-  constructor(private httpClient:HttpClient) { }
 
-  getProblems():Observable<Problem[]>{
-    //return this.problems;
-    this.httpClient.get('/api/v1/problems')
+  private problemsSource = new BehaviorSubject<Problem[]>([]);
+
+  constructor(private http: Http) { }
+
+  getProblems(): Observable<Problem[]> {
+    this.http.get("api/v1/problems")
       .toPromise()
-      .then((res:any)=>{
-        this._problemService.next(res);
+      .then((res: Response) => {
+        this.problemsSource.next(res.json());
       })
       .catch(this.handleError);
-      return this._problemService.asObservable();
+
+    return this.problemsSource.asObservable();
   }
 
-  getProblem(id:number):Promise<Problem>{
-    //return this.problems.find((problem)=>problem.id===id);
-    return this.httpClient.get(`api/v1/problems/${id}`)
-          .toPromise()
-          .then((res:any)=>res)
-          .catch(this.handleError);
+  getProblem(id: number): Promise<Problem> {
+    return this.http.get(`api/v1/problems/${id}`)
+                     .toPromise()
+                     .then((res: Response) => res.json())
+                     .catch(this.handleError);
   }
 
-  addProblem(problem:Problem) : Promise<Problem>{
-    // problem.id=this.problems.length+1;
-    // this.problems.push(problem);
-    const options={headers:new HttpHeaders({'Content-Type':'application/json'})};
-    return this.httpClient.post('api/v1/problems',problem,options)
+  addProblem(problem: Problem): Promise<Problem> {
+    let headers = new Headers({ 'content-type': 'application/json' });
+    return this.http.post('/api/v1/problems', problem, headers)
       .toPromise()
-      .then((res:any)=>{
+      .then((res: Response) => {
         this.getProblems();
-        return res;
+        return res.json();
       })
       .catch(this.handleError);
   }
 
-  buildAndRun(data) : Promise<any> {
-    const options={headers:new HttpHeaders({'Content-Type':'application/json'})};
-    return this.httpClient.post('api/v1/build_and_run',data,options)
-    .toPromise()
-    .then((res)=>{
-      console.log(res);
-      return res;
-    })
-    .catch(this.handleError);
+  buildAndRun(data): Promise<Object> {
+    let headers = new Headers({'content-type': 'application/json'});
+    return this.http.post('/api/v1/build_and_run', data, headers)
+                    .toPromise()
+                    .then((res: Response) => {
+                      console.log(res);
+                      return res.json();
+                    })
+                    .catch(this.handleError);
   }
 
-  private handleError(error:any):Promise<any>{
+  // error hanlder
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.body || error);
   }
 }

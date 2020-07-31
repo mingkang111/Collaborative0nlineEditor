@@ -9,7 +9,7 @@ describe('CollaborationService', () => {
     });
   });
 
-  it('should be created', inject([CollaborationService], (service: CollaborationService) => {
+  it('should ...', inject([CollaborationService], (service: CollaborationService) => {
     expect(service).toBeTruthy();
   }));
 });

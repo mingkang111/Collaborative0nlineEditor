@@ -1,36 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Problem } from "../../models/problem.model";
+import { Subscription } from 'rxjs/Subscription';
 
-import {Subscription} from 'rxjs/Subscription';
-
-import {Problem} from '../../models/problem.model';
-
-import {PROBLEMS} from '../../mock-problems';
-
-import {DataService} from '../../services/data.service';
-import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-problem-list',
   templateUrl: './problem-list.component.html',
   styleUrls: ['./problem-list.component.css']
 })
-export class ProblemListComponent implements OnInit,OnDestroy {
-  problems:Problem[];
-  subscriptionProblems:Subscription;
-  constructor(private dataService:DataService) { }
+export class ProblemListComponent implements OnInit {
+
+  problems: Problem[] = [];
+  subscriptionProblems: Subscription;
+
+  birthday = new Date();
+  money = 25;
+  Apr = 0.21;
+
+  searchTerm: string = '';
+  subscriptionInput: Subscription;
+
+  constructor(@Inject("data") private data,
+              @Inject("input") private input) { }
 
   ngOnInit() {
     this.getProblems();
+    this.getSearchTerm();
   }
 
-  ngOnDestroy(){
-    this.subscriptionProblems.unsubscribe();
+  getProblems(): void {
+    this.subscriptionProblems = this.data.getProblems()
+                                          .subscribe(problems => this.problems = problems);
   }
 
-  getProblems():void{
-    //this.problems=this.dataService.getProblems();
-    this.subscriptionProblems=this.dataService.getProblems()
-      .subscribe(problems=>this.problems=problems);
+  getSearchTerm(): void {
+    this.subscriptionInput = this.input.getInput()
+                                .subscribe(
+                                  inputTerm => this.searchTerm = inputTerm
+                                );
   }
 
 }
